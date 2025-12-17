@@ -1,14 +1,17 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
+  host: process.env.DB_HOST,
   port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'mehedi_tailors',
-  user: process.env.DB_USER || 'postgres',
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
+  ssl: process.env.DB_SSL === 'true' ? {
+    rejectUnauthorized: false
+  } : false
 });
 
 pool.on('connect', () => {
@@ -17,7 +20,6 @@ pool.on('connect', () => {
 
 pool.on('error', (err) => {
   console.error('Unexpected database error:', err);
-  process.exit(-1);
 });
 
 module.exports = pool;
