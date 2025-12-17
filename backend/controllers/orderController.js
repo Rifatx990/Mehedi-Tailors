@@ -1,5 +1,5 @@
 const pool = require('../config/database');
-const { v4: uuidv4 } = require('uuid');
+// REMOVE THIS LINE: const { v4: uuidv4 } = require('uuid');
 
 const orderController = {
   // Create new order
