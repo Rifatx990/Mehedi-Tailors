@@ -43,28 +43,62 @@ export const getProfile = createAsyncThunk(
   }
 );
 
-const initialState = {
-  user: authService.getCurrentUser(),
-  token: authService.getToken(),
-  isLoading: false,
-  isAuthenticated: authService.isAuthenticated(),
-  error: null,
+// Get initial state from localStorage safely
+const getInitialState = () => {
+  try {
+    const userStr = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    
+    return {
+      user: userStr ? JSON.parse(userStr) : null,
+      token: token,
+      isLoading: false,
+      isAuthenticated: !!token,
+      error: null,
+    };
+  } catch (error) {
+    console.error('Error reading from localStorage:', error);
+    return {
+      user: null,
+      token: null,
+      isLoading: false,
+      isAuthenticated: false,
+      error: null,
+    };
+  }
 };
+
+const initialState = getInitialState();
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     logout: (state) => {
-      authService.logout();
+      // Clear localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      
+      // Reset state
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
+      
       toast.success('Logged out successfully');
     },
     clearError: (state) => {
       state.error = null;
     },
+    setCredentials: (state, action) => {
+      const { user, token } = action.payload;
+      state.user = user;
+      state.token = token;
+      state.isAuthenticated = true;
+      
+      // Save to localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -83,6 +117,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload?.error || 'Registration failed';
       })
+      
       // Login
       .addCase(login.pending, (state) => {
         state.isLoading = true;
@@ -98,12 +133,13 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload?.error || 'Login failed';
       })
+      
       // Get Profile
       .addCase(getProfile.fulfilled, (state, action) => {
         state.user = action.payload.user;
       });
-  },
+  }
 });
 
-export const { logout, clearError } = authSlice.actions;
+export const { logout, clearError, setCredentials } = authSlice.actions;
 export default authSlice.reducer;
