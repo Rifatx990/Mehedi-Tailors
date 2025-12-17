@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0ea5e9" />
+    <meta name="description" content="Mehedi Tailors And Fabrics - Premium Clothing Shop & Custom Tailoring Management System" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://meheditailors.com/" />
+    <meta property="og:title" content="Mehedi Tailors And Fabrics - Premium Clothing & Tailoring" />
+    <meta property="og:description" content="Experience premium ready-made clothing and expert custom tailoring services" />
+    <meta property="og:image" content="%PUBLIC_URL%/og-image.jpg" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://meheditailors.com/" />
+    <meta property="twitter:title" content="Mehedi Tailors And Fabrics - Premium Clothing & Tailoring" />
+    <meta property="twitter:description" content="Experience premium ready-made clothing and expert custom tailoring services" />
+    <meta property="twitter:image" content="%PUBLIC_URL%/og-image.jpg" />
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Mehedi Tailors" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png" />
+    
+    <!-- Favicon for various devices -->
+    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png" />
+    
+    <!-- iOS Splash Screen -->
+    <link rel="apple-touch-startup-image" href="%PUBLIC_URL%/splash.png" />
+    
+    <!-- Page Title -->
+    <title>Mehedi Tailors And Fabrics - Premium Clothing Shop & Custom Tailoring</title>
+    
+    <!-- Critical CSS (for initial load performance) -->
+    <style>
+      /* Critical CSS - Loads before React to prevent FOUC */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background-color: #f9fafb;
+        color: #111827;
+        overflow-x: hidden;
+      }
+      
+      /* Loading spinner */
+      #loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.3s ease;
+      }
+      
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      .loading-text {
+        color: white;
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: 500;
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      /* Hide loading screen when app loads */
+      #root:not(:empty) ~ #loading {
+        opacity: 0;
+        visibility: hidden;
+      }
+      
+      /* Ensure images don't overflow */
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+      
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #0ea5e9;
+        border-radius: 4px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #0284c7;
+      }
+      
+      /* Selection color */
+      ::selection {
+        background-color: rgba(14, 165, 233, 0.3);
+        color: #111827;
+      }
+    </style>
+    
+    <!-- Preconnect to important origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Service Worker Registration Script -->
+    <script>
+      // Register service worker for PWA
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/service-worker.js').then(
+            function(registration) {
+              console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            },
+            function(err) {
+              console.log('ServiceWorker registration failed: ', err);
+            }
+          );
+        });
+      }
+      
+      // Loader removal on app load
+      window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+          var loader = document.getElementById('loading');
+          if (loader) {
+            loader.style.display = 'none';
+          }
+        }, 1000);
+      });
+    </script>
+  </head>
+  
+  <body>
+    <!-- Loading Screen -->
+    <div id="loading">
+      <div class="spinner"></div>
+      <div class="loading-text">Loading Mehedi Tailors...</div>
+    </div>
+    
+    <!-- React App Root -->
+    <div id="root"></div>
+    
+    <!-- No Script Fallback -->
+    <noscript>
+      <div style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        z-index: 99999;
+      ">
+        <h1 style="font-size: 2.5rem; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
+          Mehedi Tailors And Fabrics
+        </h1>
+        <p style="font-size: 1.2rem; margin-bottom: 30px; max-width: 600px;">
+          JavaScript is required to run this application. Please enable JavaScript in your browser settings.
+        </p>
+        <div style="background: white; color: #0ea5e9; padding: 15px 30px; border-radius: 8px; font-weight: bold;">
+          Enable JavaScript & Refresh
+        </div>
+      </div>
+    </noscript>
+    
+    <!-- PWA Installation Prompt Script -->
+    <script>
+      // PWA installation prompt
+      let deferredPrompt;
+      
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later
+        deferredPrompt = e;
+        
+        // Show install button if not already installed
+        if (!window.matchMedia('(display-mode: standalone)').matches) {
+          setTimeout(() => {
+            if (typeof window.showInstallPrompt === 'function') {
+              window.showInstallPrompt();
+            }
+          }, 3000);
+        }
+      });
+      
+      // Track PWA installation
+      window.addEventListener('appinstalled', (evt) => {
+        console.log('PWA was installed');
+        deferredPrompt = null;
+      });
+    </script>
+    
+    <!-- Error Boundary Script -->
+    <script>
+      // Global error handler
+      window.addEventListener('error', function(e) {
+        console.error('Global error caught:', e.error);
+      });
+      
+      // Unhandled promise rejection handler
+      window.addEventListener('unhandledrejection', function(e) {
+        console.error('Unhandled promise rejection:', e.reason);
+      });
+    </script>
+  </body>
+  </html>
