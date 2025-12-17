@@ -1,8 +1,9 @@
 const { Pool } = require('pg');
 
-// Use DATABASE_URL if provided (Render provides this), otherwise use individual components
+// Use DATABASE_URL from environment (Render provides this)
+// Make sure it includes ?sslmode=require
 const connectionString = process.env.DATABASE_URL || 
-  `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+  `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}?sslmode=require`;
 
 console.log('Connecting to database:', connectionString.replace(/:[^:@]*?@/, ':****@'));
 
@@ -44,11 +45,13 @@ const testConnection = async () => {
     
     // More detailed error info
     console.error('🔍 Connection details:', {
+      hasConnectionString: !!process.env.DATABASE_URL,
       host: process.env.DB_HOST,
       port: process.env.DB_PORT,
       database: process.env.DB_NAME,
       user: process.env.DB_USER,
-      sslRequired: true
+      sslRequired: true,
+      errorCode: error.code
     });
     
     if (client) client.release();
@@ -56,13 +59,8 @@ const testConnection = async () => {
   }
 };
 
-// Export test function
+// Export pool and test function
 module.exports = {
   pool,
   testConnection
 };
-
-// Test connection on startup in production
-if (process.env.NODE_ENV === 'production' && require.main === module) {
-  testConnection();
-}
