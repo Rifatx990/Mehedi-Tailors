@@ -19,3 +19,6 @@ export const store = configureStore({
       },
     }),
 });
+
+// Export store instance separately
+export default store;
