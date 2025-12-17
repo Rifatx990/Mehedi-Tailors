@@ -1,0 +1,13 @@
+# Robots.txt for Mehedi Tailors And Fabrics
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /worker/
+
+# Sitemap
+Sitemap: https://meheditailors.com/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1
