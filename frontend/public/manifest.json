@@ -1,0 +1,78 @@
+{
+  "short_name": "Mehedi Tailors",
+  "name": "Mehedi Tailors And Fabrics - Clothing Shop & Tailoring Management System",
+  "description": "Premium ready-made clothing and expert custom tailoring services",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0ea5e9",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "scope": "/",
+  "categories": ["business", "shopping", "fashion"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "shortcuts": [
+    {
+      "name": "Shop Now",
+      "short_name": "Shop",
+      "description": "Browse our collection",
+      "url": "/shop",
+      "icons": [{ "src": "shop-icon.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Custom Tailoring",
+      "short_name": "Tailoring",
+      "description": "Create custom clothing",
+      "url": "/custom-tailoring",
+      "icons": [{ "src": "tailor-icon.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "My Orders",
+      "short_name": "Orders",
+      "description": "View your orders",
+      "url": "/dashboard/orders",
+      "icons": [{ "src": "orders-icon.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Mehedi Tailors Dashboard"
+    },
+    {
+      "src": "screenshot2.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile Shopping Experience"
+    }
+  ],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": ["auto", "focus-existing", "navigate-new", "navigate-existing"]
+  }
+}
