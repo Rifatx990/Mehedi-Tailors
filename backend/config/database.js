@@ -6,14 +6,16 @@ const connectionString = process.env.DATABASE_URL ||
 
 console.log('Connecting to database:', connectionString.replace(/:[^:@]*?@/, ':****@'));
 
+// Render PostgreSQL requires SSL
 const pool = new Pool({
   connectionString: connectionString,
-  ssl: process.env.NODE_ENV === 'production' ? {
-    rejectUnauthorized: false
-  } : false,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  ssl: {
+    rejectUnauthorized: false, // Required for Render PostgreSQL
+    sslmode: 'require'
+  },
+  max: 10, // Reduced for Render free tier
+  idleTimeoutMillis: 10000,
+  connectionTimeoutMillis: 5000,
 });
 
 pool.on('connect', () => {
@@ -26,18 +28,41 @@ pool.on('error', (err) => {
 
 // Test connection function
 const testConnection = async () => {
+  let client;
   try {
-    const client = await pool.connect();
+    client = await pool.connect();
     console.log('✅ Database connected successfully');
+    
+    // Test query
+    const result = await client.query('SELECT NOW()');
+    console.log('📅 Database time:', result.rows[0].now);
+    
     client.release();
+    return true;
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
+    
+    // More detailed error info
+    console.error('🔍 Connection details:', {
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      sslRequired: true
+    });
+    
+    if (client) client.release();
+    return false;
   }
 };
 
-// Test connection on startup
-if (process.env.NODE_ENV !== 'test') {
+// Export test function
+module.exports = {
+  pool,
+  testConnection
+};
+
+// Test connection on startup in production
+if (process.env.NODE_ENV === 'production' && require.main === module) {
   testConnection();
 }
-
-module.exports = pool;
