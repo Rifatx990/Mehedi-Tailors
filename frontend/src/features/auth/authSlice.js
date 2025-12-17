@@ -11,8 +11,9 @@ export const register = createAsyncThunk(
       toast.success('Registration successful!');
       return response;
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Registration failed');
-      return rejectWithValue(error.response?.data);
+      const errorMsg = error.response?.data?.error || 'Registration failed';
+      toast.error(errorMsg);
+      return rejectWithValue({ error: errorMsg });
     }
   }
 );
@@ -25,8 +26,9 @@ export const login = createAsyncThunk(
       toast.success('Login successful!');
       return response;
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Login failed');
-      return rejectWithValue(error.response?.data);
+      const errorMsg = error.response?.data?.error || 'Login failed';
+      toast.error(errorMsg);
+      return rejectWithValue({ error: errorMsg });
     }
   }
 );
@@ -43,29 +45,18 @@ export const getProfile = createAsyncThunk(
   }
 );
 
-// Get initial state from localStorage safely
+// Get initial state
 const getInitialState = () => {
-  try {
-    const userStr = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    
-    return {
-      user: userStr ? JSON.parse(userStr) : null,
-      token: token,
-      isLoading: false,
-      isAuthenticated: !!token,
-      error: null,
-    };
-  } catch (error) {
-    console.error('Error reading from localStorage:', error);
-    return {
-      user: null,
-      token: null,
-      isLoading: false,
-      isAuthenticated: false,
-      error: null,
-    };
-  }
+  const user = authService.getCurrentUser();
+  const token = authService.getToken();
+  
+  return {
+    user: user,
+    token: token,
+    isLoading: false,
+    isAuthenticated: !!token,
+    error: null,
+  };
 };
 
 const initialState = getInitialState();
@@ -75,15 +66,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      // Clear localStorage
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      
-      // Reset state
+      authService.logout();
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
-      
       toast.success('Logged out successfully');
     },
     clearError: (state) => {
@@ -94,10 +80,6 @@ const authSlice = createSlice({
       state.user = user;
       state.token = token;
       state.isAuthenticated = true;
-      
-      // Save to localStorage
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
     }
   },
   extraReducers: (builder) => {
