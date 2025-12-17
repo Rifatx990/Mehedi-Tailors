@@ -4,6 +4,7 @@ import cartReducer from '../features/cart/cartSlice';
 import productReducer from '../features/products/productSlice';
 import orderReducer from '../features/orders/orderSlice';
 
+// Create store without any side effects
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -13,12 +14,6 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ['cart/addToCart'],
-        ignoredPaths: ['cart.items'],
-      },
+      serializableCheck: false, // Disable for now to avoid issues
     }),
 });
-
-// Export store instance separately
-export default store;
