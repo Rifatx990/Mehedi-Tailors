@@ -1,4 +1,5 @@
 import api from './api';
+import { getToken, getUser, isAuthenticated as checkAuth } from '../utils/auth';
 
 const authService = {
   // Register new user
@@ -44,34 +45,28 @@ const authService = {
 
   // Get current user from localStorage
   getCurrentUser: () => {
-    try {
-      const userStr = localStorage.getItem('user');
-      return userStr ? JSON.parse(userStr) : null;
-    } catch (error) {
-      console.error('Error parsing user from localStorage:', error);
-      return null;
-    }
+    return getUser();
   },
 
   // Get token from localStorage
   getToken: () => {
-    return localStorage.getItem('token');
+    return getToken();
   },
 
   // Check if user is authenticated
   isAuthenticated: () => {
-    return !!localStorage.getItem('token');
+    return checkAuth();
   },
 
   // Check if user is admin
   isAdmin: () => {
-    const user = authService.getCurrentUser();
+    const user = getUser();
     return user && user.role === 'admin';
   },
 
   // Check if user is worker
   isWorker: () => {
-    const user = authService.getCurrentUser();
+    const user = getUser();
     return user && user.role === 'worker';
   }
 };
