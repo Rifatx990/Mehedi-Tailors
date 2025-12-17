@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { store } from '../app/store';
-import { logout } from '../features/auth/authSlice';
+import { getToken, logout } from '../utils/auth';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
+// Create axios instance
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -11,10 +11,10 @@ const api = axios.create({
   },
 });
 
-// Request interceptor to add auth token
+// Request interceptor - add auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -25,15 +25,13 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle errors
+// Response interceptor - handle errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      store.dispatch(logout());
-      window.location.href = '/login';
+      // Use the utility function instead of importing store
+      logout();
     }
     return Promise.reject(error);
   }
